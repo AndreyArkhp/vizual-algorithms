@@ -3,7 +3,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
-import "./string.css";
+import styles from "./string.module.css";
 
 export const StringComponent: React.FC = () => {
   const [string, setString] = useState("");
@@ -14,9 +14,9 @@ export const StringComponent: React.FC = () => {
   }
   return (
     <SolutionLayout title="Строка">
-      <form className="form" onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input maxLength={11} isLimitText onChange={(e) => setString(e.currentTarget.value)} />
-        <Button type="submit" extraClass="form__button" text="Развернуть" linkedList="small" />
+        <Button type="submit" text="Развернуть" linkedList="small" />
       </form>
       {isShow && string.split("").map((el, index) => <Circle letter={el} key={index} />)}
       <Circle letter="A" head="Head" tail="tail" isSmall />
