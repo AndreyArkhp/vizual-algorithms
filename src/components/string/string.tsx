@@ -13,13 +13,19 @@ export const StringComponent: React.FC = () => {
     setIsShow(true);
   }
   return (
-    <SolutionLayout title="Строка">
+    <SolutionLayout title="Строка" extraClass={styles.layout}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <Input maxLength={11} isLimitText onChange={(e) => setString(e.currentTarget.value)} />
+        <Input
+          maxLength={11}
+          isLimitText
+          value={string}
+          onChange={(e) => setString(e.currentTarget.value)}
+        />
         <Button type="submit" text="Развернуть" linkedList="small" />
       </form>
-      {isShow && string.split("").map((el, index) => <Circle letter={el} key={index} />)}
-      <Circle letter="A" head="Head" tail="tail" isSmall />
+      <section className={styles.visualization}>
+        {isShow && string.split("").map((el, index) => <Circle letter={el} key={index} />)}
+      </section>
     </SolutionLayout>
   );
 };
