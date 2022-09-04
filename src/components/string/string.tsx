@@ -1,4 +1,5 @@
 import React, {FormEvent, useState} from "react";
+import {BUTTON_TEXT, MAX_LENGTH_INPUT, TITLE_PAGE} from "../../constants/string-page";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {Input} from "../ui/input/input";
@@ -13,15 +14,15 @@ export const StringComponent: React.FC = () => {
     setIsShow(true);
   }
   return (
-    <SolutionLayout title="Строка" extraClass={styles.layout}>
+    <SolutionLayout title={TITLE_PAGE} extraClass={styles.layout}>
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
-          maxLength={11}
+          maxLength={MAX_LENGTH_INPUT}
           isLimitText
           value={string}
           onChange={(e) => setString(e.currentTarget.value)}
         />
-        <Button type="submit" text="Развернуть" linkedList="small" />
+        <Button type="submit" text={BUTTON_TEXT} linkedList="small" />
       </form>
       <section className={styles.visualization}>
         {isShow && string.split("").map((el, index) => <Circle letter={el} key={index} />)}
