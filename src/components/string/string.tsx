@@ -13,9 +13,11 @@ type TArrForDisplay = [string, ElementStates];
 export const StringComponent: React.FC = () => {
   const [string, setString] = useState("");
   const [arrForDisplay, setArrForDisplay] = useState<TArrForDisplay[]>([]);
+  const [btnLoader, setBtnLoader] = useState(false);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setBtnLoader(true);
     draw(string);
   }
 
@@ -37,7 +39,10 @@ export const StringComponent: React.FC = () => {
     setArrForDisplay(arr);
 
     const timerId = setInterval(() => {
-      if (start >= end - 1) clearInterval(timerId);
+      if (start >= end - 2) {
+        clearInterval(timerId);
+        setBtnLoader(false);
+      }
       step(arr, start++, end--);
     }, DELAY_IN_MS);
   }
@@ -52,7 +57,6 @@ export const StringComponent: React.FC = () => {
       }
       return el;
     });
-
     setArrForDisplay(newArr);
   }
 
@@ -65,7 +69,7 @@ export const StringComponent: React.FC = () => {
           value={string}
           onChange={(e) => setString(e.currentTarget.value)}
         />
-        <Button type="submit" text={BUTTON_TEXT} linkedList="small" />
+        <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
       </form>
       <section className={styles.visualization}>
         {arrForDisplay.map((el, index) => (
