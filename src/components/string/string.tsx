@@ -2,6 +2,7 @@ import React, {FormEvent, useState} from "react";
 import {DELAY_IN_MS} from "../../constants/delays";
 import {BUTTON_TEXT, MAX_LENGTH_INPUT, TITLE_PAGE} from "../../constants/string-page";
 import {ElementStates} from "../../types/element-states";
+import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {Input} from "../ui/input/input";
@@ -62,7 +63,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title={TITLE_PAGE} extraClass={styles.layout}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <Form handleSubmit={handleSubmit}>
         <Input
           maxLength={MAX_LENGTH_INPUT}
           isLimitText
@@ -70,7 +71,7 @@ export const StringComponent: React.FC = () => {
           onChange={(e) => setString(e.currentTarget.value)}
         />
         <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
-      </form>
+      </Form>
       <section className={styles.visualization}>
         {arrForDisplay.map((el, index) => (
           <Circle letter={el[0]} key={index} state={el[1]} />
