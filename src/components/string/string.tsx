@@ -7,6 +7,7 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
+import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./string.module.css";
 
 type TArrForDisplay = [string, ElementStates];
@@ -72,11 +73,11 @@ export const StringComponent: React.FC = () => {
         />
         <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
       </Form>
-      <section className={styles.visualization}>
+      <VizualAlgoContent>
         {arrForDisplay.map((el, index) => (
           <Circle letter={el[0]} key={index} state={el[1]} />
         ))}
-      </section>
+      </VizualAlgoContent>
     </SolutionLayout>
   );
 };
