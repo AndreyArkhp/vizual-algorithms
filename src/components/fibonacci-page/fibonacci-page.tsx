@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   BUTTON_TEXT,
   MAX__INPUT_NUMBER,
@@ -11,7 +11,17 @@ import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 
 export const FibonacciPage: React.FC = () => {
-  const [inputValue, setInputValue] = useState<number>();
+  const [inputValue, setInputValue] = useState<number>(0);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [showElements, setShowElements] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (inputValue < 1 || inputValue > 19) {
+      !btnDisabled && setBtnDisabled(true);
+    } else {
+      btnDisabled && setBtnDisabled(false);
+    }
+  }, [inputValue, btnDisabled]);
   // function x(n) {
   //   let x = 0;
   //   let y = 1;
@@ -42,10 +52,15 @@ export const FibonacciPage: React.FC = () => {
           type="number"
           max={MAX__INPUT_NUMBER}
           min={MIN_INPUT_NUMBER}
-          value={inputValue}
           onChange={(e) => setInputValue(Number(e.currentTarget.value))}
         />
-        <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={false} />
+        <Button
+          type="submit"
+          text={BUTTON_TEXT}
+          linkedList="small"
+          isLoader={false}
+          disabled={btnDisabled}
+        />
       </Form>
     </SolutionLayout>
   );
