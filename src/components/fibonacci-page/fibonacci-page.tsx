@@ -22,15 +22,18 @@ export const FibonacciPage: React.FC = () => {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setButtonLoader(true);
-    const timerId = setInterval(() => {
-      const newArr = getNextFibonacciNumbers(+inputValue);
-      if (newArr.length > +inputValue) {
-        clearInterval(timerId);
-        setButtonLoader(false);
-      }
-      setShowElements([...newArr]);
-    }, SHORT_DELAY_IN_MS);
+    setShowElements([...getNextFibonacciNumbers(+inputValue)]);
+    if (+inputValue > 0) {
+      setButtonLoader(true);
+      const timerId = setInterval(() => {
+        const newArr = getNextFibonacciNumbers(+inputValue);
+        if (newArr.length > +inputValue) {
+          clearInterval(timerId);
+          setButtonLoader(false);
+        }
+        setShowElements([...newArr]);
+      }, SHORT_DELAY_IN_MS);
+    }
   }
 
   useEffect(() => {
