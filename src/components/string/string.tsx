@@ -63,7 +63,7 @@ export const StringComponent: React.FC = () => {
   }
 
   return (
-    <SolutionLayout title={TITLE_PAGE} extraClass={styles.layout}>
+    <SolutionLayout title={TITLE_PAGE}>
       <Form handleSubmit={handleSubmit}>
         <Input
           maxLength={MAX_LENGTH_INPUT}
@@ -73,7 +73,7 @@ export const StringComponent: React.FC = () => {
         />
         <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
       </Form>
-      <VizualAlgoContent>
+      <VizualAlgoContent extraClass={styles.string__content}>
         {arrForDisplay.map((el, index) => (
           <Circle letter={el[0]} key={index} state={el[1]} />
         ))}
