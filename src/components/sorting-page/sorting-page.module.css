@@ -25,4 +25,5 @@ margin-inline-end: 80px;
 
 .sorting__content{
   min-height: 368px;
+  align-items: flex-end;
 }
