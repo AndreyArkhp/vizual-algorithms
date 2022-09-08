@@ -11,10 +11,12 @@ export function getNextFibonacciNumbers(stop: number) {
     reset = false;
   }
   if (resArr.length === 0) {
+    if (stop === 0) reset = true;
     resArr.push(0);
     return resArr;
   }
   if (resArr.length === 1) {
+    if (stop === 1) reset = true;
     resArr.push(1);
     return resArr;
   }
