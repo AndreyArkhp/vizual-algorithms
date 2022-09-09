@@ -1,0 +1,9 @@
+.visualization{
+  display: flex;
+  margin: 0 auto;
+  width: max-content;
+  max-width: 944px;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 48px;
+}

@@ -1,10 +1,11 @@
 import React from "react";
-import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import DocumentTitle from "react-document-title";
+import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 
 export const ListPage: React.FC = () => {
   return (
-    <SolutionLayout title="Связный список">
-
-    </SolutionLayout>
+    <DocumentTitle title="Связный список">
+      <SolutionLayout title="Связный список"></SolutionLayout>
+    </DocumentTitle>
   );
 };

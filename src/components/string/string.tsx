@@ -1,11 +1,14 @@
 import React, {FormEvent, useState} from "react";
+import DocumentTitle from "react-document-title";
 import {DELAY_IN_MS} from "../../constants/delays";
 import {BUTTON_TEXT, MAX_LENGTH_INPUT, TITLE_PAGE} from "../../constants/string-page";
 import {ElementStates} from "../../types/element-states";
+import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
+import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./string.module.css";
 
 type TArrForDisplay = [string, ElementStates];
@@ -61,21 +64,23 @@ export const StringComponent: React.FC = () => {
   }
 
   return (
-    <SolutionLayout title={TITLE_PAGE} extraClass={styles.layout}>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          maxLength={MAX_LENGTH_INPUT}
-          isLimitText
-          value={string}
-          onChange={(e) => setString(e.currentTarget.value)}
-        />
-        <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
-      </form>
-      <section className={styles.visualization}>
-        {arrForDisplay.map((el, index) => (
-          <Circle letter={el[0]} key={index} state={el[1]} />
-        ))}
-      </section>
-    </SolutionLayout>
+    <DocumentTitle title={TITLE_PAGE}>
+      <SolutionLayout title={TITLE_PAGE}>
+        <Form handleSubmit={handleSubmit}>
+          <Input
+            maxLength={MAX_LENGTH_INPUT}
+            isLimitText
+            value={string}
+            onChange={(e) => setString(e.currentTarget.value)}
+          />
+          <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
+        </Form>
+        <VizualAlgoContent extraClass={styles.string__content}>
+          {arrForDisplay.map((el, index) => (
+            <Circle letter={el[0]} key={index} state={el[1]} />
+          ))}
+        </VizualAlgoContent>
+      </SolutionLayout>
+    </DocumentTitle>
   );
 };

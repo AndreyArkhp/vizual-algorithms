@@ -1,10 +1,11 @@
 import React from "react";
-import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import DocumentTitle from "react-document-title";
+import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 
 export const QueuePage: React.FC = () => {
   return (
-    <SolutionLayout title="Очередь">
-
-    </SolutionLayout>
+    <DocumentTitle title="Очередь">
+      <SolutionLayout title="Очередь"></SolutionLayout>
+    </DocumentTitle>
   );
 };
