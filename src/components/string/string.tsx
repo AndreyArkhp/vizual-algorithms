@@ -1,4 +1,5 @@
 import React, {FormEvent, useState} from "react";
+import DocumentTitle from "react-document-title";
 import {DELAY_IN_MS} from "../../constants/delays";
 import {BUTTON_TEXT, MAX_LENGTH_INPUT, TITLE_PAGE} from "../../constants/string-page";
 import {ElementStates} from "../../types/element-states";
@@ -63,21 +64,23 @@ export const StringComponent: React.FC = () => {
   }
 
   return (
-    <SolutionLayout title={TITLE_PAGE}>
-      <Form handleSubmit={handleSubmit}>
-        <Input
-          maxLength={MAX_LENGTH_INPUT}
-          isLimitText
-          value={string}
-          onChange={(e) => setString(e.currentTarget.value)}
-        />
-        <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
-      </Form>
-      <VizualAlgoContent extraClass={styles.string__content}>
-        {arrForDisplay.map((el, index) => (
-          <Circle letter={el[0]} key={index} state={el[1]} />
-        ))}
-      </VizualAlgoContent>
-    </SolutionLayout>
+    <DocumentTitle title={TITLE_PAGE}>
+      <SolutionLayout title={TITLE_PAGE}>
+        <Form handleSubmit={handleSubmit}>
+          <Input
+            maxLength={MAX_LENGTH_INPUT}
+            isLimitText
+            value={string}
+            onChange={(e) => setString(e.currentTarget.value)}
+          />
+          <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
+        </Form>
+        <VizualAlgoContent extraClass={styles.string__content}>
+          {arrForDisplay.map((el, index) => (
+            <Circle letter={el[0]} key={index} state={el[1]} />
+          ))}
+        </VizualAlgoContent>
+      </SolutionLayout>
+    </DocumentTitle>
   );
 };

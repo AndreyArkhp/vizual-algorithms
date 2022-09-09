@@ -1,4 +1,5 @@
 import React, {FormEvent, useEffect, useState} from "react";
+import DocumentTitle from "react-document-title";
 import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 import {
   BUTTON_TEXT,
@@ -45,27 +46,29 @@ export const FibonacciPage: React.FC = () => {
   }, [inputValue, btnDisabled]);
 
   return (
-    <SolutionLayout title={TITLE_PAGE}>
-      <Form handleSubmit={handleSubmit}>
-        <Input
-          type="number"
-          max={MAX__INPUT_NUMBER}
-          min={MIN_INPUT_NUMBER}
-          onChange={(e) => setInputValue(e.currentTarget.value)}
-        />
-        <Button
-          type="submit"
-          text={BUTTON_TEXT}
-          linkedList="small"
-          isLoader={btnLoader}
-          disabled={btnDisabled}
-        />
-      </Form>
-      <VizualAlgoContent>
-        {showElements.map((el, index) => (
-          <Circle letter={String(el)} key={index} tail={String(index)} />
-        ))}
-      </VizualAlgoContent>
-    </SolutionLayout>
+    <DocumentTitle title={TITLE_PAGE}>
+      <SolutionLayout title={TITLE_PAGE}>
+        <Form handleSubmit={handleSubmit}>
+          <Input
+            type="number"
+            max={MAX__INPUT_NUMBER}
+            min={MIN_INPUT_NUMBER}
+            onChange={(e) => setInputValue(e.currentTarget.value)}
+          />
+          <Button
+            type="submit"
+            text={BUTTON_TEXT}
+            linkedList="small"
+            isLoader={btnLoader}
+            disabled={btnDisabled}
+          />
+        </Form>
+        <VizualAlgoContent>
+          {showElements.map((el, index) => (
+            <Circle letter={String(el)} key={index} tail={String(index)} />
+          ))}
+        </VizualAlgoContent>
+      </SolutionLayout>
+    </DocumentTitle>
   );
 };
