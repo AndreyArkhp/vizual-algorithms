@@ -1,8 +1,8 @@
-import React, {FormEvent, useState} from "react";
-
-import {TITLE_PAGE} from "../../constants/string-page";
+import React, {FormEvent, useEffect, useState} from "react";
+import DocumentTitle from "react-document-title";
+import {DELAY_IN_MS} from "../../constants/delays";
+import {TITLE_PAGE} from "../../constants/sorting-page";
 import {Direction} from "../../types/direction";
-import {ElementStates} from "../../types/element-states";
 import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
 import {Column} from "../ui/column/column";
@@ -10,72 +10,98 @@ import {RadioInput} from "../ui/radio-input/radio-input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./sorting-page.module.css";
-import {getRandomArr} from "./utils";
-
-type TMethodSort = "bubble" | "selection";
-interface IShowElement {
-  value: number;
-  state: ElementStates;
-  id: string;
-}
+import {IShowElement, TMethodSort} from "./types";
+import {getRandomArr, sortBubble, sortSelection} from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [methodSort, setMethodSort] = useState<TMethodSort>("selection");
-  const [checkedSelected, setCheckedSelected] = useState(true);
-  const [checkedBubble, setCheckedBubble] = useState(false);
+  const [direction, setDirection] = useState(Direction.Ascending);
   const [showElements, setShowElements] = useState<IShowElement[]>([]);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  useEffect(() => {
+    setShowElements(getRandomArr());
+  }, []);
 
   function handleSubbmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("submit", showElements);
+    setBtnDisabled(true);
+    const sortFunc = methodSort === "selection" ? sortSelection : sortBubble;
+    let result = sortFunc(direction, showElements);
+    setShowElements(result.value);
+    const timerId = setInterval(() => {
+      result = sortFunc(direction, result.value);
+      if (result.done) {
+        clearInterval(timerId);
+        setBtnDisabled(false);
+      }
+      setShowElements(result.value);
+    }, DELAY_IN_MS);
   }
 
   function handleCheckedRadio(e: FormEvent<HTMLInputElement>) {
-    setCheckedSelected(!checkedSelected);
-    setCheckedBubble(!checkedBubble);
+    if (e.currentTarget.name === "selection") {
+      setMethodSort("selection");
+    } else {
+      setMethodSort("bubble");
+    }
   }
+
   function handleClickNewArr() {
     setShowElements(getRandomArr());
   }
 
   return (
-    <SolutionLayout title={TITLE_PAGE}>
-      <Form handleSubmit={handleSubbmit} extraClass={styles.form}>
-        <fieldset className={`${styles.form__field} ${styles.form__field_type_radio}`}>
-          <RadioInput
-            label="Выбор"
-            name="selected"
-            onChange={handleCheckedRadio}
-            checked={checkedSelected}
-          />
-          <RadioInput
-            label="Пузырек"
-            name="bubble"
-            onChange={handleCheckedRadio}
-            checked={checkedBubble}
-          />
-        </fieldset>
-        <fieldset className={`${styles.form__field} ${styles.form__field_type_button}`}>
+    <DocumentTitle title={TITLE_PAGE}>
+      <SolutionLayout title={TITLE_PAGE}>
+        <Form handleSubmit={handleSubbmit} extraClass={styles.form}>
+          <fieldset className={`${styles.form__field} ${styles.form__field_type_radio}`}>
+            <RadioInput
+              label="Выбор"
+              name="selection"
+              onChange={handleCheckedRadio}
+              checked={methodSort === "selection"}
+              disabled={btnDisabled}
+            />
+            <RadioInput
+              label="Пузырек"
+              name="bubble"
+              onChange={handleCheckedRadio}
+              checked={methodSort === "bubble"}
+              disabled={btnDisabled}
+            />
+          </fieldset>
+          <fieldset className={`${styles.form__field} ${styles.form__field_type_button}`}>
+            <Button
+              type="submit"
+              onClick={() => setDirection(Direction.Ascending)}
+              sorting={Direction.Ascending}
+              text="По возрастанию"
+              disabled={btnDisabled}
+              isLoader={direction === Direction.Ascending && btnDisabled}
+            />
+            <Button
+              type="submit"
+              onClick={() => setDirection(Direction.Descending)}
+              sorting={Direction.Descending}
+              text="По убыванию"
+              disabled={btnDisabled}
+              isLoader={direction === Direction.Descending && btnDisabled}
+            />
+          </fieldset>
           <Button
-            type="submit"
-            onClick={() => console.log(1)}
-            sorting={Direction.Ascending}
-            text="По возрастанию"
+            type="button"
+            text="Новый массив"
+            onClick={handleClickNewArr}
+            disabled={btnDisabled}
           />
-          <Button
-            type="submit"
-            onClick={() => console.log(2)}
-            sorting={Direction.Descending}
-            text="По убыванию"
-          />
-        </fieldset>
-        <Button type="button" text="Новый массив" onClick={handleClickNewArr} />
-      </Form>
-      <VizualAlgoContent extraClass={styles.sorting__content}>
-        {showElements.map((el) => (
-          <Column index={el.value} key={el.id} />
-        ))}
-      </VizualAlgoContent>
-    </SolutionLayout>
+        </Form>
+        <VizualAlgoContent extraClass={styles.sorting__content}>
+          {showElements.map((el) => (
+            <Column index={el.value} key={el.id} state={el.state} />
+          ))}
+        </VizualAlgoContent>
+      </SolutionLayout>
+    </DocumentTitle>
   );
 };
