@@ -9,25 +9,30 @@ import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./stack-page.module.css";
+import {ElementStates} from "../../types/element-states";
+import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
   const [newStackElement, setNewStackElement] = useState("");
-  const [showElements, setShowElements] = useState<string[]>([]);
+  const [showElements, setShowElements] = useState<{value: string; id: string}[]>([]);
+  const [headState, setHeadState] = useState(ElementStates.Changing);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setNewStackElement("");
+    setShowElements([]);
   }
   function handleClickAddBtn() {
-    setShowElements([...showElements, newStackElement]);
+    setShowElements([...showElements, {value: newStackElement, id: uuidv4()}]);
+    setHeadState(ElementStates.Changing);
+    setNewStackElement("");
+    setTimeout(() => setHeadState(ElementStates.Default), SHORT_DELAY_IN_MS);
   }
   function handleClickRemoveBtn() {
-    setShowElements((prevEl) => {
-      const newArr = prevEl.pop();
-      console.log(newArr);
-
-      return [];
-    });
+    setHeadState(ElementStates.Changing);
+    setTimeout(() => {
+      setShowElements(showElements.slice(0, -1));
+      setHeadState(ElementStates.Default);
+    }, SHORT_DELAY_IN_MS);
   }
   return (
     <DocumentTitle title="Стек">
@@ -42,20 +47,32 @@ export const StackPage: React.FC = () => {
             />
             <Button
               text="Добавить"
-              type="submit"
+              type="button"
               extraClass={styles.form__button}
               onClick={handleClickAddBtn}
             />
             <Button
               text="Удалить"
-              type="submit"
+              type="button"
               extraClass={styles.form__button}
               onClick={handleClickRemoveBtn}
             />
           </fieldset>
           <Button text="Очистить" type="submit" extraClass={styles.form__button} />
         </Form>
-        <VizualAlgoContent>{showElements}</VizualAlgoContent>
+        <VizualAlgoContent>
+          {showElements.map((el, index, arr) => {
+            return (
+              <Circle
+                letter={el.value}
+                head={el === arr.at(-1) ? "Top" : ""}
+                key={el.id}
+                index={index}
+                state={el === arr.at(-1) ? headState : ElementStates.Default}
+              />
+            );
+          })}
+        </VizualAlgoContent>
       </SolutionLayout>
     </DocumentTitle>
   );
