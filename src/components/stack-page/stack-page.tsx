@@ -15,7 +15,8 @@ import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 export const StackPage: React.FC = () => {
   const [newStackElement, setNewStackElement] = useState("");
   const [showElements, setShowElements] = useState<{value: string; id: string}[]>([]);
-  const [headState, setHeadState] = useState(ElementStates.Changing);
+  const [headState, setHeadState] = useState(ElementStates.Default);
+  const [isLoaderRemoveBtn, setIsLoaderRemoveBtn] = useState(false);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,10 +29,12 @@ export const StackPage: React.FC = () => {
     setTimeout(() => setHeadState(ElementStates.Default), SHORT_DELAY_IN_MS);
   }
   function handleClickRemoveBtn() {
+    setIsLoaderRemoveBtn(true);
     setHeadState(ElementStates.Changing);
     setTimeout(() => {
       setShowElements(showElements.slice(0, -1));
       setHeadState(ElementStates.Default);
+      setIsLoaderRemoveBtn(false);
     }, SHORT_DELAY_IN_MS);
   }
   return (
@@ -48,17 +51,26 @@ export const StackPage: React.FC = () => {
             <Button
               text="Добавить"
               type="button"
-              extraClass={styles.form__button}
+              extraClass={`${styles.form__button} ${styles.form__button_type_add}`}
               onClick={handleClickAddBtn}
+              disabled={showElements.length > 9 || !newStackElement}
+              isLoader={headState === ElementStates.Changing && !isLoaderRemoveBtn}
             />
             <Button
               text="Удалить"
               type="button"
-              extraClass={styles.form__button}
+              extraClass={`${styles.form__button} ${styles.form__button_type_remove}`}
               onClick={handleClickRemoveBtn}
+              disabled={!showElements.length}
+              isLoader={isLoaderRemoveBtn}
             />
           </fieldset>
-          <Button text="Очистить" type="submit" extraClass={styles.form__button} />
+          <Button
+            text="Очистить"
+            type="submit"
+            extraClass={styles.form__button}
+            disabled={!showElements.length}
+          />
         </Form>
         <VizualAlgoContent>
           {showElements.map((el, index, arr) => {
