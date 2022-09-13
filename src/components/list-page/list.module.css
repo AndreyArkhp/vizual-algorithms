@@ -3,9 +3,21 @@
   grid-template-columns: 204px repeat(4,175px);
   width: 952px;
   gap: 12px;
+  margin-block-end: 130px;
 }
 
 
 .form__largeBtn{
   grid-column: span 2;
+}
+
+.vizualContent{
+align-items: center;
+position: relative;
+}
+
+.step{
+  position: absolute;
+  background: #fff;
+  z-index: 2;
 }

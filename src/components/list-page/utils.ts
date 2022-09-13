@@ -1,7 +1,10 @@
-import {ILinkedList} from "./types";
+import {IArrayFromList, ILinkedList} from "./types";
+import {v4 as uuidv4} from "uuid";
+import {ElementStates} from "../../types/element-states";
 
 export class LinkedListNode<T> {
   value: T;
+  id: string = uuidv4();
   next: LinkedListNode<T> | null;
   constructor(value: T, next?: LinkedListNode<T> | null) {
     this.value = value;
@@ -12,13 +15,22 @@ export class LinkedListNode<T> {
 export class LinkedList<T> implements ILinkedList<T> {
   private head: LinkedListNode<T> | null;
   private size: number;
-  arr: T[] = [];
   constructor(arr?: T[]) {
-    if (arr) {
-      this.arr = arr;
-    }
     this.head = null;
     this.size = 0;
+    if (arr) {
+      arr.forEach((el) => this.append(el));
+    }
+  }
+
+  toArray() {
+    let curr = this.head;
+    const arr: IArrayFromList[] = [];
+    while (curr) {
+      arr.push({value: String(curr.value), id: curr.id, state: ElementStates.Default});
+      curr = curr.next;
+    }
+    return arr;
   }
 
   insertAt(element: T, index: number) {
@@ -68,6 +80,12 @@ export class LinkedList<T> implements ILinkedList<T> {
       current.next = node;
     }
     this.size++;
+  }
+
+  prepend(element: T) {
+    const node = new LinkedListNode(element);
+    node.next = this.head;
+    this.head = node;
   }
 
   getSize() {
