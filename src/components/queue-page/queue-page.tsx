@@ -1,6 +1,6 @@
 import React, {FormEvent, useMemo, useState} from "react";
 import DocumentTitle from "react-document-title";
-import {MAX_LENGTH_INPUT} from "../../constants/stack-and-queue-page";
+import {MAX_LENGTH_INPUT, QUEUE_LENGTH} from "../../constants/stack-and-queue-page";
 import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
@@ -10,10 +10,8 @@ import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import {Queue} from "./queue";
 import styles from "./queue.module.css";
 
-// const queue = new Queue<string>(10);
-
 export const QueuePage: React.FC = () => {
-  const memoQueue = useMemo(() => new Queue<string>(10), []);
+  const memoQueue = useMemo(() => new Queue<string>(QUEUE_LENGTH), []);
   const [newQueueElement, setNewQueueElement] = useState("");
   const [showElements, setShowElements] = useState(memoQueue.getElements);
 
