@@ -20,4 +20,5 @@ position: relative;
   position: absolute;
   background: #fff;
   z-index: 2;
+  overflow: hidden;
 }

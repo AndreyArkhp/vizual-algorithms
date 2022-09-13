@@ -1,4 +1,4 @@
-import React, {FormEvent, Fragment, useRef, useState} from "react";
+import React, {Fragment, useRef, useState} from "react";
 import DocumentTitle from "react-document-title";
 import {DELAY_IN_MS} from "../../constants/delays";
 import {
@@ -27,12 +27,12 @@ export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [showElements, setShowElements] = useState(linkedList.current.toArray());
   const [stepState, setStepState] = useState(ElementStates.Default);
+  const [stepValue, setStepValue] = useState("");
   const [styleStep, setStyleStep] = useState({top: "-65px", left: "12px", display: "none"});
-  const [btnLoader, setBtnLoader] = useState(false);
   const [btnActive, setBtnActive] = useState(currentBtnLoading.NoActive);
   function handleClickAddHead() {
+    setStepValue(inputValue);
     setInputValue("");
-    setBtnLoader(true);
     setBtnActive(currentBtnLoading.HeadAdd);
     setStyleStep((prev) => {
       return {...prev, display: "block"};
@@ -49,9 +49,28 @@ export const ListPage: React.FC = () => {
       setStepState(ElementStates.Default);
       setTimeout(() => {
         setBtnActive(currentBtnLoading.NoActive);
+        setStepValue("");
         newArr[0].state = ElementStates.Default;
         setShowElements([...newArr]);
       }, DELAY_IN_MS);
+    }, DELAY_IN_MS);
+  }
+
+  function handleClickRemoveHead() {
+    setBtnActive(currentBtnLoading.HeadRemove);
+    setStepValue(showElements[0].value);
+    setStyleStep({display: "block", top: "118px", left: "12px"});
+    setStepState(ElementStates.Changing);
+    showElements[0].value = "";
+    setShowElements([...showElements]);
+    linkedList.current.deleteHead();
+    setTimeout(() => {
+      setStepValue("");
+      setStyleStep({top: "-65px", left: "12px", display: "none"});
+      setStepState(ElementStates.Default);
+      const newArr = linkedList.current.toArray();
+      setShowElements(newArr);
+      setBtnActive(currentBtnLoading.NoActive);
     }, DELAY_IN_MS);
   }
   console.log("render", linkedList.current.toArray());
@@ -76,11 +95,14 @@ export const ListPage: React.FC = () => {
           />
           <Button
             text="Добавить в tail"
+            type="button"
             isLoader={btnActive === currentBtnLoading.TailAdd}
             disabled={!inputValue}
           />
           <Button
             text="Удалить из head"
+            type="button"
+            onClick={handleClickRemoveHead}
             isLoader={btnActive === currentBtnLoading.HeadRemove}
             disabled={btnActive !== currentBtnLoading.NoActive}
           />
@@ -95,17 +117,19 @@ export const ListPage: React.FC = () => {
             text="Добавить по индексу"
             extraClass={styles.form__largeBtn}
             isLoader={btnActive === currentBtnLoading.IndexAdd}
+            disabled={btnActive !== currentBtnLoading.NoActive}
           />
           <Button
             text="Удалить по индексу"
             extraClass={styles.form__largeBtn}
             isLoader={btnActive === currentBtnLoading.IndexRemove}
+            disabled={btnActive !== currentBtnLoading.NoActive}
           />
         </Form>
 
         <VizualAlgoContent extraClass={styles.vizualContent}>
           <div className={styles.step} style={styleStep}>
-            <Circle letter="c" isSmall state={stepState} />
+            <Circle letter={stepValue} isSmall state={stepState} />
           </div>
           {showElements.map((el, index, arr) => (
             <Fragment key={index}>

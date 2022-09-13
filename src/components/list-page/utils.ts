@@ -88,6 +88,12 @@ export class LinkedList<T> implements ILinkedList<T> {
     this.head = node;
   }
 
+  deleteHead() {
+    if (this.head) {
+      this.head = this.head.next;
+    }
+  }
+
   getSize() {
     return this.size;
   }
