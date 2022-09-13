@@ -1,11 +1,8 @@
-export interface IQueue<T> {
-  enqueue: (item: T) => void;
-  dequeue: () => void;
-  clear: () => void;
-}
+import {ElementStates} from "../../types/element-states";
+import {IElement, IQueue} from "./types";
 
 export class Queue<T> implements IQueue<T> {
-  private container: (T | number)[] = [];
+  private container: (T | null)[] = [];
   private head = 0;
   private tail = 0;
   private readonly size: number = 0;
@@ -13,12 +10,14 @@ export class Queue<T> implements IQueue<T> {
 
   constructor(size: number) {
     this.size = size;
-    for (let i = 0; i < this.size; i++) {
-      this.container[i] = 0;
-    }
+    this.container = Array(size);
   }
 
   enqueue = (item: T) => {
+    if (this.length === 0) {
+      this.head = 0;
+      this.tail = 0;
+    }
     if (this.length >= this.size) {
       throw new Error("Превышена максимальная длинна");
     }
@@ -34,13 +33,13 @@ export class Queue<T> implements IQueue<T> {
     if (this.length === 0) {
       throw new Error("В очереди нет элементов");
     }
-    this.container[this.head] = 0;
+    this.container[this.head] = null;
     this.head === this.size - 1 ? (this.head = 0) : this.head++;
     this.length--;
   };
 
   clear = () => {
-    this.container = this.container.map((el) => (el = 0));
+    this.container = Array(this.size);
     this.head = 0;
     this.tail = 0;
     this.length = 0;
@@ -63,7 +62,22 @@ export class Queue<T> implements IQueue<T> {
   }
 
   get getTail() {
-    if (this.tail === 0) return this.size - 1;
+    if (this.tail === 0) return this.length > 0 ? this.size - 1 : 0;
     return this.tail - 1;
   }
+}
+
+export function unionStates(prev: IElement[], next: (string | null)[]) {
+  return prev.map((el, index) => {
+    const element = next[index];
+    el.state = ElementStates.Default;
+    if (element && element !== el.value) {
+      el.value = element;
+      return el;
+    } else if (element === el.value) {
+      return el;
+    }
+    el.value = "";
+    return el;
+  });
 }
