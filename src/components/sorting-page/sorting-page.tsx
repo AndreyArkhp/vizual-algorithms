@@ -11,7 +11,7 @@ import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./sorting-page.module.css";
 import {IShowElement, TMethodSort} from "./types";
-import {getRandomArr, sortBubble, sortSelection} from "./utils";
+import {getNewShowElements, sortBubble, sortSelection} from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [methodSort, setMethodSort] = useState<TMethodSort>("selection");
@@ -20,7 +20,7 @@ export const SortingPage: React.FC = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   useEffect(() => {
-    setShowElements(getRandomArr());
+    setShowElements(getNewShowElements());
   }, []);
 
   function handleSubbmit(e: FormEvent<HTMLFormElement>) {
@@ -48,7 +48,7 @@ export const SortingPage: React.FC = () => {
   }
 
   function handleClickNewArr() {
-    setShowElements(getRandomArr());
+    setShowElements(getNewShowElements());
   }
 
   return (

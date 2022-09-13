@@ -1,6 +1,8 @@
 import {v4 as uuidv4} from "uuid";
+import {MAX_LENGTH_ARR, MAX_NUMBER_IN_ARR, MIN_LENGTH_ARR} from "../../constants/sorting-page";
 import {Direction} from "../../types/direction";
 import {ElementStates} from "../../types/element-states";
+import {getRandomArr} from "../../utils/function";
 import {IShowElement} from "./types";
 
 function getMinOrMaxIndex(a: number, b: number, arr: IShowElement[], direction: Direction) {
@@ -118,16 +120,11 @@ function sortArrBubble() {
   };
 }
 
-export function getRandomArr() {
-  const newArr = [];
-  for (let i = 0; i <= Math.trunc(Math.random() * (18 - 3) + 3); i++) {
-    newArr.push({
-      value: Math.floor(Math.random() * 100),
-      state: ElementStates.Default,
-      id: uuidv4(),
-    });
-  }
-  return newArr;
+export function getNewShowElements() {
+  const newArr = getRandomArr(MIN_LENGTH_ARR, MAX_LENGTH_ARR, MAX_NUMBER_IN_ARR);
+  return newArr.map((el) => {
+    return {value: el, state: ElementStates.Default, id: uuidv4()};
+  });
 }
 
 export const sortSelection = sortArrSelect();
