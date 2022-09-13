@@ -6,8 +6,10 @@ import {Button} from "../ui/button/button";
 import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import styles from "./list.module.css";
+import {LinkedList} from "./utils";
 
 export const ListPage: React.FC = () => {
+  console.log(new LinkedList(["a", "b"]));
   return (
     <DocumentTitle title="Связный список">
       <SolutionLayout title="Связный список">
