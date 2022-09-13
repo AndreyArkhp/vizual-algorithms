@@ -1,7 +1,7 @@
 import React, {FormEvent, useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import DocumentTitle from "react-document-title";
-import {MAX_LENGTH_INPUT} from "../../constants/stack-page";
+import {MAX_LENGTH_INPUT} from "../../constants/stack-and-queue-page";
 import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
