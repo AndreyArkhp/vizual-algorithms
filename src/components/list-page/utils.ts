@@ -96,7 +96,12 @@ export class LinkedList<T> implements ILinkedList<T> {
         curr = curr.next;
       }
       prev.next = null;
+      if (curr === prev) {
+        this.head = null;
+      }
     }
+    this.size--;
+
   }
 
   deleteAt(index: number) {

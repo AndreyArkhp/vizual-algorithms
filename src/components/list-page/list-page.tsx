@@ -94,6 +94,8 @@ export const ListPage: React.FC = () => {
       setStepValue("");
       setStepPosition({top: Pointer.Top, left: Pointer.Start, display: Pointer.Hidden});
       const newArr = linkedList.current.toArray();
+      console.log(linkedList.current);
+
       setShowElements(newArr);
       setBtnActive(currentBtnLoading.NoActive);
     }, DELAY_IN_MS);
@@ -198,12 +200,12 @@ export const ListPage: React.FC = () => {
             type="button"
             onClick={() => handleClickRemoveHeadOrTail("head")}
             isLoader={btnActive === currentBtnLoading.HeadRemove}
-            disabled={btnActive !== currentBtnLoading.NoActive}
+            disabled={btnActive !== currentBtnLoading.NoActive || !showElements.length}
           />
           <Button
             text="Удалить из tail"
             isLoader={btnActive === currentBtnLoading.TailRemove}
-            disabled={btnActive !== currentBtnLoading.NoActive}
+            disabled={btnActive !== currentBtnLoading.NoActive || !showElements.length}
             onClick={() => handleClickRemoveHeadOrTail("tail")}
           />
 
