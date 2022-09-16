@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useState} from "react";
 import DocumentTitle from "react-document-title";
 import {SHORT_DELAY_IN_MS} from "../../constants/delays";
 import {
@@ -17,18 +17,19 @@ import {getNextFibonacciNumbers} from "./utils";
 
 export const FibonacciPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [btnDisabled, setBtnDisabled] = useState(false);
   const [btnLoader, setButtonLoader] = useState(false);
   const [showElements, setShowElements] = useState<number[]>([]);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setShowElements([...getNextFibonacciNumbers(+inputValue)]);
-    if (+inputValue > 0) {
+    const value = +inputValue;
+    setInputValue("");
+    setShowElements([...getNextFibonacciNumbers(value)]);
+    if (value > 0) {
       setButtonLoader(true);
       const timerId = setInterval(() => {
-        const newArr = getNextFibonacciNumbers(+inputValue);
-        if (newArr.length > +inputValue) {
+        const newArr = getNextFibonacciNumbers(value);
+        if (newArr.length > value) {
           clearInterval(timerId);
           setButtonLoader(false);
         }
@@ -36,14 +37,6 @@ export const FibonacciPage: React.FC = () => {
       }, SHORT_DELAY_IN_MS);
     }
   }
-
-  useEffect(() => {
-    if (+inputValue < 0 || +inputValue > 19) {
-      !btnDisabled && setBtnDisabled(true);
-    } else {
-      btnDisabled && setBtnDisabled(false);
-    }
-  }, [inputValue, btnDisabled]);
 
   return (
     <DocumentTitle title={TITLE_PAGE}>
@@ -53,6 +46,7 @@ export const FibonacciPage: React.FC = () => {
             type="number"
             max={MAX__INPUT_NUMBER}
             min={MIN_INPUT_NUMBER}
+            value={inputValue}
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
           <Button
@@ -60,7 +54,7 @@ export const FibonacciPage: React.FC = () => {
             text={BUTTON_TEXT}
             linkedList="small"
             isLoader={btnLoader}
-            disabled={btnDisabled}
+            disabled={+inputValue < 0 || +inputValue > 19 || !inputValue}
           />
         </Form>
         <VizualAlgoContent>
