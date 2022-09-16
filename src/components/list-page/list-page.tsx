@@ -99,15 +99,15 @@ export const ListPage: React.FC = () => {
     }, DELAY_IN_MS);
   }
 
-  function handleClickAddByIndex(index: string) {
+  function handleClickAddByIndex() {
     setBtnActive(currentBtnLoading.IndexAdd);
     setStepValue(inputValue);
-    movePointer(index, setStepPosition);
-    linkedList.current.insertAt(inputValue, +index);
+    movePointer(inputIndex, setStepPosition);
+    linkedList.current.insertAt(inputValue, +inputIndex);
     const newArr = linkedList.current.toArray();
     const timerId = setInterval(() => {
-      const position = movePointer(index, setStepPosition);
-      setShowElements([...changeStateShowElements(showElements, newArr, +index)]);
+      const position = movePointer(inputIndex, setStepPosition);
+      setShowElements([...changeStateShowElements(+inputIndex, showElements, false, newArr)]);
       if (position) {
         clearInterval(timerId);
         setBtnActive(currentBtnLoading.NoActive);
@@ -123,6 +123,42 @@ export const ListPage: React.FC = () => {
     }, DELAY_IN_MS);
     setInputValue("");
     setInputIndex("");
+  }
+
+  function handleClickRemoveByIndex() {
+    const inputIndexValue = +inputIndex;
+    setInputIndex("");
+    setBtnActive(currentBtnLoading.IndexRemove);
+    setStepValue(showElements[inputIndexValue].value);
+    linkedList.current.deleteAt(inputIndexValue);
+    let step = 0;
+    setShowElements([...changeStateShowElements(inputIndexValue, showElements, true)]);
+
+    const timerId = setInterval(() => {
+      if (step === inputIndexValue) {
+        setStepPosition({
+          display: Pointer.Visible,
+          top: Pointer.Bottom,
+          left: parseInt(Pointer.Start) + Pointer.Step * inputIndexValue,
+        });
+      }
+
+      if (step > inputIndexValue) {
+        setTimeout(() => {
+          setStepPosition({
+            display: Pointer.Hidden,
+            top: Pointer.Bottom,
+            left: parseInt(Pointer.Start) + Pointer.Step * inputIndexValue,
+          });
+          setShowElements(linkedList.current.toArray());
+          setBtnActive(currentBtnLoading.NoActive);
+        }, 0);
+        clearInterval(timerId);
+        step = 0;
+      }
+      setShowElements([...changeStateShowElements(inputIndexValue, showElements, true)]);
+      step++;
+    }, DELAY_IN_MS);
   }
 
   return (
@@ -180,7 +216,9 @@ export const ListPage: React.FC = () => {
           />
           <p
             className={`${styles.form__error} ${styles.form__error_type_maxIndex} ${
-              +inputIndex > showElements.length - 1 && styles.form__error_visible
+              showElements.length &&
+              +inputIndex > showElements.length - 1 &&
+              styles.form__error_visible
             }`}
           >
             Максимальный индекс равен {showElements.length - 1}
@@ -195,13 +233,14 @@ export const ListPage: React.FC = () => {
               btnActive !== currentBtnLoading.NoActive ||
               +inputIndex > showElements.length - 1
             }
-            onClick={() => handleClickAddByIndex(inputIndex)}
+            onClick={handleClickAddByIndex}
           />
           <Button
             text="Удалить по индексу"
             extraClass={styles.form__largeBtn}
             isLoader={btnActive === currentBtnLoading.IndexRemove}
-            disabled={btnActive !== currentBtnLoading.NoActive}
+            disabled={btnActive !== currentBtnLoading.NoActive || !inputIndex}
+            onClick={handleClickRemoveByIndex}
           />
         </Form>
 
