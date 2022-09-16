@@ -73,7 +73,13 @@ export const StringComponent: React.FC = () => {
             value={string}
             onChange={(e) => setString(e.currentTarget.value)}
           />
-          <Button type="submit" text={BUTTON_TEXT} linkedList="small" isLoader={btnLoader} />
+          <Button
+            type="submit"
+            text={BUTTON_TEXT}
+            linkedList="small"
+            isLoader={btnLoader}
+            disabled={string.length < 2}
+          />
         </Form>
         <VizualAlgoContent extraClass={styles.string__content}>
           {arrForDisplay.map((el, index) => (
