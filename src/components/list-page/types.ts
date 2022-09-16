@@ -6,7 +6,6 @@ export interface ILinkedList<T> {
   deleteHead: () => void;
   insertAt: (element: T, position: number) => void;
   getSize: () => number;
-  print: () => void;
 }
 
 export interface IArrayFromList {

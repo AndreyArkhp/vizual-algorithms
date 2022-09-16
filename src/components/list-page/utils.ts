@@ -34,7 +34,7 @@ export class LinkedList<T> implements ILinkedList<T> {
   }
 
   insertAt(element: T, index: number) {
-    if (index < 0 || index > this.size) {
+    if (index < 0 || index >= this.size) {
       console.log("Укажите корректный индекс");
       return;
     } else {
@@ -45,14 +45,12 @@ export class LinkedList<T> implements ILinkedList<T> {
       } else {
         let curr = this.head;
         let currIndex = 0;
-        if (curr && typeof curr === "object") {
-          while (currIndex < index - 1 && curr) {
-            curr = curr.next;
-            currIndex++;
-          }
-          node.next = curr ? curr.next : null;
-          curr && (curr.next = node);
+        while (currIndex < index - 1 && curr) {
+          curr = curr.next;
+          currIndex++;
         }
+        node.next = curr ? curr.next : null;
+        curr && (curr.next = node);
       }
 
       this.size++;
@@ -101,18 +99,31 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
   }
 
-  getSize() {
-    return this.size;
+  deleteAt(index: number) {
+    if (index < 0 || index >= this.size) {
+      console.log("Укажите корректный индекс");
+      return;
+    } else {
+      if (index === 0 && this.head) {
+        this.head = this.head.next;
+      } else {
+        let curr = this.head;
+        let currIndex = 0;
+        while (currIndex < index - 1 && curr) {
+          curr = curr.next;
+          currIndex++;
+        }
+        if (curr && curr.next) {
+          curr && (curr.next = curr?.next?.next);
+        }
+      }
+
+      this.size++;
+    }
   }
 
-  print() {
-    let curr = this.head;
-    let res = "";
-    while (curr) {
-      res += `${curr.value} `;
-      curr = curr.next;
-    }
-    console.log(res);
+  getSize() {
+    return this.size;
   }
 }
 
@@ -139,13 +150,14 @@ function changeStateEl() {
   let newArr: IArrayFromList[] = [{value: "", id: "", state: ElementStates.Default}];
   let step = 0;
   return function (
+    endElement: number,
     prevElements: IArrayFromList[],
-    nextElements: IArrayFromList[],
-    endElement: number
+    deleteEl: boolean,
+    nextElements?: IArrayFromList[]
   ) {
     if (!step) newArr = [...prevElements];
 
-    if (step === endElement) {
+    if (step === endElement && !deleteEl && nextElements) {
       return nextElements.map((el, index) => {
         if (index < endElement) {
           el.state = ElementStates.Changing;
@@ -159,9 +171,14 @@ function changeStateEl() {
         return el;
       });
     }
-
-    newArr[step].state = ElementStates.Changing;
+    if (deleteEl && step === endElement + 1) {
+      newArr[step - 1].state = ElementStates.Default;
+      newArr[step - 1].value = "";
+    } else if (step <= endElement) {
+      newArr[step].state = ElementStates.Changing;
+    }
     step++;
+    if (deleteEl && step === endElement + 3) step = 0;
     return newArr;
   };
 }
