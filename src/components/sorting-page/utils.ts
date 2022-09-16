@@ -123,7 +123,7 @@ function sortArrBubble() {
 export function getNewShowElements() {
   const newArr = getRandomArr(MIN_LENGTH_ARR, MAX_LENGTH_ARR, MAX_NUMBER_IN_ARR);
   return newArr.map((el) => {
-    return {value: el, state: ElementStates.Default, id: uuidv4()};
+    return {value: +el, state: ElementStates.Default, id: uuidv4()};
   });
 }
 
