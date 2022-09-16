@@ -1,4 +1,4 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useRef, useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import DocumentTitle from "react-document-title";
 import {MAX_LENGTH_INPUT} from "../../constants/stack-and-queue-page";
@@ -11,8 +11,10 @@ import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./stack-page.module.css";
 import {ElementStates} from "../../types/element-states";
 import {SHORT_DELAY_IN_MS} from "../../constants/delays";
+import {Stack} from "./utils";
 
 export const StackPage: React.FC = () => {
+  const stack = useRef(new Stack<string>());
   const [newStackElement, setNewStackElement] = useState("");
   const [showElements, setShowElements] = useState<{value: string; id: string}[]>([]);
   const [headState, setHeadState] = useState(ElementStates.Default);
@@ -23,16 +25,18 @@ export const StackPage: React.FC = () => {
     setShowElements([]);
   }
   function handleClickAddBtn() {
-    setShowElements([...showElements, {value: newStackElement, id: uuidv4()}]);
+    stack.current.push(newStackElement, uuidv4());
+    setShowElements([...stack.current.getElements]);
     setHeadState(ElementStates.Changing);
     setNewStackElement("");
     setTimeout(() => setHeadState(ElementStates.Default), SHORT_DELAY_IN_MS);
   }
   function handleClickRemoveBtn() {
+    stack.current.pop();
     setIsLoaderRemoveBtn(true);
     setHeadState(ElementStates.Changing);
     setTimeout(() => {
-      setShowElements(showElements.slice(0, -1));
+      setShowElements(stack.current.getElements);
       setHeadState(ElementStates.Default);
       setIsLoaderRemoveBtn(false);
     }, SHORT_DELAY_IN_MS);
