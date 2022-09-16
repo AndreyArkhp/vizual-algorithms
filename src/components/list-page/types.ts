@@ -14,3 +14,15 @@ export interface IArrayFromList {
   id: string;
   state: ElementStates;
 }
+
+export enum Pointer {
+  Step = 136,
+  Top = "-65px",
+  Bottom = "118px",
+  Start = "12px",
+  Visible = "block",
+  Hidden = "none",
+}
+
+export type TPosition = "head" | "tail";
+
