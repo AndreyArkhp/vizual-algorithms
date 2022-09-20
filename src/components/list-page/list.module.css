@@ -1,0 +1,47 @@
+.form{
+  display: grid;
+  grid-template-columns: 204px repeat(4,175px);
+  width: 952px;
+  gap: 12px;
+  margin-block-end: 130px;
+  position: relative;
+}
+
+
+.form__largeBtn{
+  grid-column: span 2;
+}
+
+.form__error{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+    color: rgba(255, 0, 0,0.8);
+     display: none;
+}
+
+.form__error_type_lengthList{
+  top: -30px;
+}
+
+.form__error_type_maxIndex{
+  top: 165px;
+}
+
+.form__error_visible{
+  display: block;
+}
+
+.vizualContent{
+align-items: center;
+position: relative;
+flex-wrap: nowrap;
+}
+
+.step{
+  position: absolute;
+  background: #fff;
+  z-index: 2;
+  overflow: hidden;
+}
