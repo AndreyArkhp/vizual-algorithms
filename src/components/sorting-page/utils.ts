@@ -5,7 +5,8 @@ import {ElementStates} from "../../types/element-states";
 import {getRandomArr} from "../../utils/function";
 import {IShowElement} from "./types";
 
-function getMinOrMaxIndex(a: number, b: number, arr: IShowElement[], direction: Direction) {
+export function getMinOrMaxIndex(a: number, b: number, arr: IShowElement[], direction: Direction) {
+  if (!arr.length) throw new Error("Пустой массив");
   if (direction === Direction.Ascending) {
     return arr[a].value > arr[b].value ? b : a;
   } else {
@@ -13,11 +14,20 @@ function getMinOrMaxIndex(a: number, b: number, arr: IShowElement[], direction: 
   }
 }
 
-function swapElDependingDirection(a: number, b: number, direction: Direction, arr: IShowElement[]) {
+export function swapElDependingDirection(
+  a: number,
+  b: number,
+  direction: Direction,
+  arr: IShowElement[]
+) {
+  if (!arr.length) throw new Error("Пустой массив");
+  function swap() {
+    [arr[a], arr[b]] = [arr[b], arr[a]];
+  }
   if (direction === Direction.Ascending) {
-    arr[a].value > arr[b].value && ([arr[a], arr[b]] = [arr[b], arr[a]]);
+    arr[a].value > arr[b].value && swap();
   } else {
-    arr[a].value < arr[b].value && ([arr[a], arr[b]] = [arr[b], arr[a]]);
+    arr[a].value < arr[b].value && swap();
   }
   return arr;
 }
@@ -28,6 +38,10 @@ function sortArrSelect() {
   let length = 0;
   let maxOrMinIndex: number = 0;
   return function innerFunc(direction: Direction, arr: IShowElement[]) {
+    if (!arr.length) throw new Error("Пустой массив");
+    if (arr.length === 1) {
+      return {value: [...arr], done: true};
+    }
     let newArr: IShowElement[] = [];
 
     if (start === 0 && nextElement === 1) {
@@ -81,6 +95,10 @@ function sortArrBubble() {
   let nextElement = 1;
   let end = 0;
   return function innerFunc(direction: Direction, arr: IShowElement[]) {
+    if (!arr.length) throw new Error("Пустой массив");
+    if (arr.length === 1) {
+      return {value: [...arr], done: true};
+    }
     let newArr: IShowElement[] = [];
 
     if (!end) {
