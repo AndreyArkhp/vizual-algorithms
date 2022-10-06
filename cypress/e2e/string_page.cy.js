@@ -1,16 +1,14 @@
+import {isDisabledBtnIfEmptyInput, isEnabledBtnIfNotEmptyInput} from "./utils";
+
 describe("The string page", () => {
   before(() => {
     cy.visit("/recursion");
   });
-  it("should button disabled if input is empty", () => {
-    cy.get("input").should("have.value", "").get("button").should("be.disabled");
-  });
-  it("should button enabled if input is not empty", () => {
-    cy.get("input").type("qwerty").get("button").should("be.enabled");
-  });
+  isDisabledBtnIfEmptyInput(it);
+  isEnabledBtnIfNotEmptyInput(it, "string");
   it("should animation work correctly", () => {
     cy.clock();
-    cy.get("button[class^='text']").click();
+    cy.get("button[class^=text]").click();
     cy.get("div[class^=circle_content]").then((letters) => {
       cy.wrap(letters.find("div[class*=circle_default]")).should((el) => {
         expect(el).to.have.length(4);
