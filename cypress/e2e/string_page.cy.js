@@ -5,7 +5,7 @@ describe("The string page", () => {
     cy.visit("/recursion");
   });
   isDisabledBtnIfEmptyInput(it);
-  isEnabledBtnIfNotEmptyInput(it, "string");
+  isEnabledBtnIfNotEmptyInput(it, "string", "Развернуть");
   it("should animation work correctly", () => {
     cy.clock();
     cy.get("button[class^=text]").click();

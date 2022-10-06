@@ -5,7 +5,7 @@ describe("The fibonacci page", () => {
     cy.visit("/fibonacci");
   });
   isDisabledBtnIfEmptyInput(it);
-  isEnabledBtnIfNotEmptyInput(it, "number");
+  isEnabledBtnIfNotEmptyInput(it, "number", "Рассчитать");
   it("should generate the fibonacci numbers", () => {
     cy.clock();
     cy.get("button[class^=text").click();
