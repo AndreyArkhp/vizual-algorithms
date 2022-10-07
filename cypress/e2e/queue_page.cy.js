@@ -42,12 +42,12 @@ describe("The queue page", () => {
       cy.wrap(elements.eq(0)).then((el) => {
         expect(el).to.contain("qwer");
         expect(el.find("div[class*=circle_head]")).to.contain("head");
-        expect(el.find("div[class*=circle_tail]")).to.contain("");
+        expect(el.find("div[class*=circle_tail]")).to.not.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(0);
       });
       cy.wrap(elements.eq(1)).then((el) => {
         expect(el).to.contain("abc");
-        expect(el.find("div[class*=circle_head]")).to.contain("");
+        expect(el.find("div[class*=circle_head]")).to.not.contain("head");
         expect(el.find("div[class*=circle_tail]")).to.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(1);
       });
@@ -61,18 +61,18 @@ describe("The queue page", () => {
       cy.wrap(elements.eq(0)).then((el) => {
         expect(el).to.contain("qwer");
         expect(el.find("div[class*=circle_head]")).to.contain("head");
-        expect(el.find("div[class*=circle_tail]")).to.contain("");
+        expect(el.find("div[class*=circle_tail]")).to.not.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(0);
       });
       cy.wrap(elements.eq(1)).then((el) => {
         expect(el).to.contain("abc");
-        expect(el.find("div[class*=circle_head]")).to.contain("");
-        expect(el.find("div[class*=circle_tail]")).to.contain("");
+        expect(el.find("div[class*=circle_head]")).to.not.contain("head");
+        expect(el.find("div[class*=circle_tail]")).to.not.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(1);
       });
       cy.wrap(elements.eq(2)).then((el) => {
         expect(el).to.contain("xyz");
-        expect(el.find("div[class*=circle_head]")).to.contain("");
+        expect(el.find("div[class*=circle_head]")).to.not.contain("head");
         expect(el.find("div[class*=circle_tail]")).to.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(2);
       });
@@ -86,14 +86,14 @@ describe("The queue page", () => {
     cy.get("div[class*=circle_content]").then((elements) => {
       cy.wrap(elements.eq(0)).then((el) => {
         expect(el).to.contain("");
-        expect(el.find("div[class*=circle_head]")).to.contain("");
-        expect(el.find("div[class*=circle_tail]")).to.contain("");
+        expect(el.find("div[class*=circle_head]")).to.not.contain("head");
+        expect(el.find("div[class*=circle_tail]")).to.not.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(0);
       });
       cy.wrap(elements.eq(1)).then((el) => {
         expect(el).to.contain("abc");
         expect(el.find("div[class*=circle_head]")).to.contain("head");
-        expect(el.find("div[class*=circle_tail]")).to.contain("");
+        expect(el.find("div[class*=circle_tail]")).to.not.contain("tail");
         expect(el.find("p[class*=circle_index]")).to.contain(1);
       });
     });
