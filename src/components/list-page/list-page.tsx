@@ -94,7 +94,6 @@ export const ListPage: React.FC = () => {
       setStepValue("");
       setStepPosition({top: Pointer.Top, left: Pointer.Start, display: Pointer.Hidden});
       const newArr = linkedList.current.toArray();
-      console.log(linkedList.current);
 
       setShowElements(newArr);
       setBtnActive(currentBtnLoading.NoActive);

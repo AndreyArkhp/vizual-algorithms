@@ -95,6 +95,13 @@ export const SortingPage: React.FC = () => {
             onClick={handleClickNewArr}
             disabled={btnDisabled}
           />
+          <Button
+            type="button"
+            text="test"
+            onClick={() => {
+              console.log(sortBubble(Direction.Descending, showElements));
+            }}
+          />
         </Form>
         <VizualAlgoContent extraClass={styles.sorting__content}>
           {showElements.map((el) => (

@@ -1,7 +1,11 @@
 import React, {FormEvent, useState} from "react";
 import DocumentTitle from "react-document-title";
 import {DELAY_IN_MS} from "../../constants/delays";
-import {BUTTON_TEXT, MAX_LENGTH_INPUT, TITLE_PAGE} from "../../constants/string-page";
+import {
+  BUTTON_TEXT_STRING,
+  MAX_LENGTH_INPUT_STRING,
+  TITLE_PAGE_STRING,
+} from "../../constants/string-page";
 import {ElementStates} from "../../types/element-states";
 import {Form} from "../form/form";
 import {Button} from "../ui/button/button";
@@ -10,6 +14,7 @@ import {Input} from "../ui/input/input";
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {VizualAlgoContent} from "../vizual-algo-contetn/vizual-algo-content";
 import styles from "./string.module.css";
+import getNextStepTurnString from "./utils";
 
 type TArrForDisplay = [string, ElementStates];
 
@@ -20,65 +25,38 @@ export const StringComponent: React.FC = () => {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setBtnLoader(true);
-    draw(string);
-  }
-
-  function draw(str: string) {
     if (string.length === 1) {
-      setArrForDisplay([[str.toUpperCase(), ElementStates.Modified]]);
-      return;
+      setArrForDisplay(getNextStepTurnString(string).arr);
+    } else {
+      setBtnLoader(true);
+      setArrForDisplay(getNextStepTurnString(string).arr);
+      const timerId = setInterval(() => {
+        const res = getNextStepTurnString(string);
+        if (res.done) {
+          clearInterval(timerId);
+          setBtnLoader(false);
+        }
+        setArrForDisplay(res.arr);
+      }, DELAY_IN_MS);
     }
-
-    let start = 0;
-    let end = string.length - 1;
-
-    const arr: TArrForDisplay[] = Array.from(str).map((el, index) => {
-      if (index === start || index === end) {
-        return [el.toUpperCase(), ElementStates.Changing];
-      }
-      return [el.toUpperCase(), ElementStates.Default];
-    });
-    setArrForDisplay(arr);
-
-    const timerId = setInterval(() => {
-      if (start >= end - 2) {
-        clearInterval(timerId);
-        setBtnLoader(false);
-      }
-      step(arr, start++, end--);
-    }, DELAY_IN_MS);
-  }
-  function step(arr: TArrForDisplay[], start: number, end: number): void {
-    [arr[start], arr[end]] = [arr[end], arr[start]];
-    const newArr: TArrForDisplay[] = arr.map((el, index) => {
-      if (index <= start || index >= end || (index === start + 1 && index === end - 1)) {
-        return [el[0], ElementStates.Modified];
-      }
-      if ((index === start + 1 || index === end - 1) && index !== 0) {
-        return [el[0], ElementStates.Changing];
-      }
-      return el;
-    });
-    setArrForDisplay(newArr);
   }
 
   return (
-    <DocumentTitle title={TITLE_PAGE}>
-      <SolutionLayout title={TITLE_PAGE}>
+    <DocumentTitle title={TITLE_PAGE_STRING}>
+      <SolutionLayout title={TITLE_PAGE_STRING}>
         <Form handleSubmit={handleSubmit}>
           <Input
-            maxLength={MAX_LENGTH_INPUT}
+            maxLength={MAX_LENGTH_INPUT_STRING}
             isLimitText
             value={string}
             onChange={(e) => setString(e.currentTarget.value)}
           />
           <Button
             type="submit"
-            text={BUTTON_TEXT}
+            text={BUTTON_TEXT_STRING}
             linkedList="small"
             isLoader={btnLoader}
-            disabled={string.length < 2}
+            disabled={!string.length}
           />
         </Form>
         <VizualAlgoContent extraClass={styles.string__content}>
